@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>拾起蒔茪｜線上訂購</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --moss:#2F4A3C;
+    --moss-dark:#1B2E24;
+    --sage:#E4E9DB;
+    --sage-line:#C6D0B9;
+    --parchment:#FBF9F2;
+    --gold:#B8952E;
+    --gold-soft:#EFE3BE;
+    --clay:#A8542E;
+    --ink:#21281F;
+    --ink-soft:#5C6656;
+    --radius:14px;
+    --shadow:0 6px 24px rgba(27,46,36,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--sage);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ---------- Header ---------- */
+  .site-header{
+    background:var(--moss);
+    color:var(--parchment);
+    padding:56px 24px 72px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .site-header::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:-1px;
+    height:40px;
+    background:var(--sage);
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .leaf-mark{width:34px;height:34px;margin:0 auto 18px;opacity:0.92;}
+  .shop-name{font-size:clamp(30px,5vw,44px);}
+  .tagline{margin-top:10px;font-size:15px;color:var(--gold-soft);letter-spacing:0.04em;}
+  .header-sub{margin-top:22px;font-size:13px;color:rgba(251,249,242,0.75);}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px 140px;}
+  .section-title{
+    display:flex;align-items:baseline;gap:12px;
+    margin:52px 0 22px;
+  }
+  .section-title h2{font-size:22px;}
+  .section-title .count{font-size:13px;color:var(--ink-soft);}
+  .back-btn{
+    border:none;background:none;color:var(--moss);font-size:13px;font-weight:600;
+    padding:0;margin-right:2px;
+  }
+  .care-note{
+    font-size:12.5px;color:var(--ink-soft);background:#fff;border:1px solid var(--sage-line);
+    border-radius:9px;padding:9px 14px;margin:-8px 0 22px;
+  }
+  .cat-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;
+  }
+  .cat-card{
+    background:var(--parchment);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    cursor:pointer;border:none;text-align:left;padding:0;font-family:inherit;
+    transition:transform 0.15s ease;
+  }
+  .cat-card:hover{transform:translateY(-3px);}
+  .cat-cover{aspect-ratio:16/10;background:linear-gradient(160deg,#DCE6D3,#C9D6BC);}
+  .cat-cover img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cat-body{padding:16px 18px 20px;}
+  .cat-body h3{font-size:19px;letter-spacing:0.02em;}
+  .cat-body p{margin:6px 0 0;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .cat-body .cat-count{display:inline-block;margin-top:10px;font-size:12px;color:var(--gold);font-weight:600;}
+  .pot-tag{
+    display:inline-block;font-size:11.5px;color:var(--ink-soft);
+    background:var(--sage);padding:2px 8px;border-radius:999px;margin-bottom:2px;
+  }
+
+  /* ---------- Product grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:20px;
+  }
+  .card{
+    background:var(--parchment);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    display:flex;flex-direction:column;
+  }
+  .card-photo{
+    aspect-ratio:1/1;
+    background:linear-gradient(160deg,#DCE6D3,#C9D6BC);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .card-photo img{width:100%;height:100%;object-fit:cover;}
+  .card-photo svg{width:44%;height:44%;opacity:0.55;}
+  .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1;}
+  .card-name{font-size:17px;}
+  .card-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;min-height:36px;}
+  .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;}
+  .price-tag{
+    background:var(--gold-soft);
+    color:#7A5F16;
+    font-weight:600;
+    font-size:13px;
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .stepper{display:flex;align-items:center;gap:10px;margin-top:10px;}
+  .stepper button{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--sage-line);
+    background:#fff;font-size:16px;line-height:1;color:var(--moss);
+  }
+  .stepper button:active{background:var(--sage);}
+  .stepper input{
+    width:36px;text-align:center;border:none;background:transparent;
+    font-size:15px;font-weight:600;color:var(--ink);
+  }
+  .add-btn{
+    margin-top:10px;
+    width:100%;
+    padding:10px 0;
+    border:none;border-radius:9px;
+    background:var(--moss);color:var(--parchment);
+    font-weight:600;font-size:14px;
+    transition:background 0.15s;
+  }
+  .add-btn.added{background:var(--clay);}
+
+  /* ---------- Sticky cart bar ---------- */
+  .cart-bar{
+    position:fixed;left:0;right:0;bottom:0;
+    background:var(--moss-dark);color:var(--parchment);
+    padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+    box-shadow:0 -6px 20px rgba(0,0,0,0.18);
+    transform:translateY(110%);
+    transition:transform 0.25s ease;
+    z-index:40;
+  }
+  .cart-bar.show{transform:translateY(0);}
+  .cart-bar .info{font-size:14px;}
+  .cart-bar .info b{color:var(--gold-soft);}
+  .cart-bar .checkout-btn{
+    background:var(--gold);color:var(--moss-dark);border:none;
+    padding:10px 20px;border-radius:9px;font-weight:700;font-size:14px;
+  }
+
+  /* ---------- Checkout panel ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(27,46,36,0.45);
+    display:none;align-items:stretch;justify-content:flex-end;z-index:50;
+  }
+  .overlay.show{display:flex;}
+  .panel{
+    width:min(440px,100%);
+    background:var(--parchment);
+    height:100%;
+    overflow-y:auto;
+    padding:26px 24px 40px;
+    position:relative;
+  }
+  .panel-close{
+    position:absolute;top:18px;right:18px;
+    background:none;border:none;font-size:22px;color:var(--ink-soft);
+  }
+  .panel h3{font-size:21px;margin-bottom:4px;}
+  .panel .hint{font-size:13px;color:var(--ink-soft);margin-bottom:20px;}
+  .cart-line{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--sage-line);font-size:14px;
+  }
+  .cart-line .rm{background:none;border:none;color:var(--clay);font-size:12px;text-decoration:underline;}
+  .cart-total{display:flex;justify-content:space-between;font-weight:700;font-size:16px;padding:14px 0;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink);}
+  .field input[type=text], .field input[type=tel], .field textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--sage-line);border-radius:8px;
+    font-family:inherit;font-size:14px;background:#fff;
+  }
+  .field textarea{resize:vertical;min-height:60px;}
+  .radio-row{display:flex;gap:10px;}
+  .radio-opt{
+    flex:1;border:1px solid var(--sage-line);border-radius:8px;padding:9px;text-align:center;
+    font-size:13px;cursor:pointer;user-select:none;
+  }
+  .radio-opt.active{background:var(--moss);color:var(--parchment);border-color:var(--moss);}
+  .transfer-box{
+    background:var(--gold-soft);border-radius:9px;padding:12px 14px;font-size:13px;
+    line-height:1.7;color:#6B5314;margin-bottom:16px;
+  }
+  .submit-btn{
+    width:100%;padding:13px 0;border:none;border-radius:9px;
+    background:var(--gold);color:var(--moss-dark);font-weight:700;font-size:15px;
+    margin-top:6px;
+  }
+  .submit-btn:disabled{opacity:0.5;}
+  .err{color:var(--clay);font-size:12px;margin-top:-10px;margin-bottom:10px;}
+
+  .success-box{text-align:center;padding:40px 6px;}
+  .success-box .leaf-mark{width:40px;height:40px;}
+  .order-no{
+    display:inline-block;margin:14px 0 6px;padding:6px 14px;background:var(--sage);
+    border-radius:999px;font-weight:700;letter-spacing:0.03em;
+  }
+  .copy-order{
+    margin-top:18px;background:none;border:1px solid var(--sage-line);
+    padding:9px 16px;border-radius:8px;font-size:13px;
+  }
+
+  /* ---------- Footer / admin ---------- */
+  footer{text-align:center;padding:30px 0 60px;font-size:12px;color:var(--ink-soft);}
+  footer a{text-decoration:underline;cursor:pointer;}
+
+  .admin-panel{width:min(720px,100%);}
+  .admin-toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .admin-toolbar button{
+    border:1px solid var(--sage-line);background:#fff;border-radius:8px;padding:8px 14px;font-size:13px;
+  }
+  .order-card{
+    border:1px solid var(--sage-line);border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;
+    background:#fff;
+  }
+  .order-card .row{display:flex;justify-content:space-between;margin-bottom:4px;}
+  .order-card .items{color:var(--ink-soft);margin:6px 0;}
+  .order-card .actions{display:flex;gap:8px;margin-top:8px;}
+  .order-card .actions button{
+    border:none;background:var(--sage);border-radius:6px;padding:5px 10px;font-size:12px;
+  }
+  .order-card .actions .del{background:#F3DCD3;color:var(--clay);}
+  .empty-state{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 0;}
+
+  .load-msg{
+    grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:14px;
+    padding:48px 16px;line-height:1.8;
+  }
+  .retry-btn{
+    margin-top:12px;border:none;border-radius:9px;background:var(--moss);color:var(--parchment);
+    padding:9px 22px;font-weight:600;font-size:14px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <svg class="leaf-mark" viewBox="0 0 24 24" fill="none" stroke="#FBF9F2" stroke-width="1.4">
+    <path d="M12 21c-6-1-9-6-9-11 5 0 9 3 9 9 0-6 4-9 9-9 0 5-3 10-9 11Z"/>
+    <path d="M12 21V9"/>
+  </svg>
+  <h1 class="shop-name display">拾起蒔茪</h1>
+  <p class="tagline">PICK UP HOPE, BRING GREEN HOME</p>
+  <p class="header-sub">線上訂購表單・選好商品後填寫資料即可送出訂單</p>
+</header>
+
+<div class="wrap">
+  <div id="categoryView">
+    <div class="section-title">
+      <h2>商品分類</h2>
+    </div>
+    <div class="cat-grid" id="categoryGrid"></div>
+  </div>
+
+  <div id="productView" style="display:none;">
+    <div class="section-title">
+      <button class="back-btn" id="backToCategories">← 返回分類</button>
+      <h2 id="categoryTitle">商品清單</h2>
+      <span class="count" id="stockCount"></span>
+    </div>
+    <p class="care-note" id="careNote"></p>
+    <div class="grid" id="productGrid"></div>
+  </div>
+
+  <footer>
+    <a id="adminLink">店家管理</a>
+  </footer>
+</div>
+
+<!-- 購物車浮動列 -->
+<div class="cart-bar" id="cartBar">
+  <div class="info">購物清單 <b id="cartCount">0</b> 件・小計 NT$ <b id="cartTotal">0</b></div>
+  <button class="checkout-btn" id="openCheckout">前往結帳</button>
+</div>
+
+<!-- 結帳面板 -->
+<div class="overlay" id="checkoutOverlay">
+  <div class="panel" id="checkoutPanel">
+    <button class="panel-close" id="closeCheckout">×</button>
+
+    <div id="checkoutStep">
+      <h3>確認訂單</h3>
+      <p class="hint">請確認品項與數量，並填寫收件資訊</p>
+      <div id="cartLines"></div>
+      <div class="cart-line"><span>商品小計</span><span>NT$ <span id="panelSubtotal">0</span></span></div>
+      <div class="cart-line"><span id="shipLabel">運費</span><span>NT$ <span id="panelShip">0</span></span></div>
+      <div class="cart-total"><span>總計</span><span>NT$ <span id="panelTotal">0</span></span></div>
+
+      <div class="field">
+        <label>姓名 / 稱呼</label>
+        <input type="text" id="fName" placeholder="您的姓名或暱稱">
+      </div>
+      <div class="field">
+        <label>聯絡電話</label>
+        <input type="tel" id="fPhone" placeholder="0912-345-678">
+      </div>
+
+      <div class="field">
+        <label>取貨方式</label>
+        <div class="radio-row" id="deliveryRow">
+          <div class="radio-opt active" data-val="宅配到府">宅配到府</div>
+          <div class="radio-opt" data-val="面交自取">面交自取（限台北）</div>
+        </div>
+        <p class="hint" id="pickupNote" style="display:none;margin-top:8px;">選擇面交的客人，請私訊粉絲專頁預約交貨地點。</p>
+      </div>
+      <div class="field" id="addressField">
+        <label>收件地址</label>
+        <input type="text" id="fAddress" placeholder="請填寫完整收件地址">
+      </div>
+
+      <div class="transfer-box" id="transferBox"></div>
+
+      <div class="field">
+        <label>匯款帳號後五碼（請先完成轉帳再填寫）</label>
+        <input type="text" id="fBankLast5" inputmode="numeric" maxlength="5" placeholder="必填，5 位數字">
+      </div>
+      <div class="field">
+        <label>備註</label>
+        <textarea id="fNote" placeholder="其他需要告知店家的事項（選填）"></textarea>
+      </div>
+
+      <div class="err" id="formErr" style="display:none;"></div>
+      <button class="submit-btn" id="submitOrder">送出訂單</button>
+    </div>
+
+    <div id="successStep" style="display:none;">
+      <div class="success-box">
+        <svg class="leaf-mark" viewBox="0 0 24 24" fill="none" stroke="#2F4A3C" stroke-width="1.4" style="margin:0 auto;display:block;">
+          <path d="M12 21c-6-1-9-6-9-11 5 0 9 3 9 9 0-6 4-9 9-9 0 5-3 10-9 11Z"/>
+          <path d="M12 21V9"/>
+        </svg>
+        <h3>訂單已送出</h3>
+        <div class="order-no" id="orderNoDisplay"></div>
+        <p class="hint">請保留訂單編號。完成匯款，訂單即成立。</p>
+        <button class="copy-order" id="copyOrderText">複製訂單內容</button>
+        <br>
+        <button class="submit-btn" id="closeSuccess" style="margin-top:20px;">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 店家後台 -->
+<div class="overlay" id="adminOverlay">
+  <div class="panel admin-panel" id="adminPanel">
+    <button class="panel-close" id="closeAdmin">×</button>
+    <h3>店家後台・收單清單</h3>
+    <p class="hint">此清單會列出所有客人送出的訂單，方便你複製紀錄與對帳。</p>
+    <div class="admin-toolbar">
+      <button id="refreshOrders">重新整理</button>
+      <button id="copyAllOrders">複製全部訂單</button>
+    </div>
+    <div id="orderList"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   基本設定
+   ※ 商品與分類請直接在 Google 試算表（Products / Categories 工作表）修改
+   ※ 後台密碼設定在 Google Apps Script 的 ADMIN_PASS，不在這個檔案裡
+   ========================================================= */
+const CONFIG = {
+  shopName: "拾起蒔茪",
+  apiUrl: "https://script.google.com/macros/s/AKfycbzBw2OBFMvD0EwyUXWiK82ugIjv-RDHyC-WRgoe7PhXo3PDqk8d-2tulRlNJOKmrDD6/exec",
+  transfer: {
+    bank: "永豐銀行（807）",
+    account: "202-018-0014561-2",
+    holder: "林O榆"
+  },
+  // 宅配運費（面交自取不收運費）
+  // fee：宅配運費；freeOver：商品小計滿多少元免運，填 0 代表不設免運門檻
+  shipping: {
+    fee: 150,
+    freeOver: 1500
+  }
+};
+
+/* ========================= 以下為程式邏輯，一般不需修改 ========================= */
+
+const leafSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="#5C6656" stroke-width="1.3">
+  <path d="M12 21c-6-1-9-6-9-11 5 0 9 3 9 9 0-6 4-9 9-9 0 5-3 10-9 11Z"/>
+  <path d="M12 21V9"/>
+</svg>`;
+
+const state = { cart:{}, delivery:"宅配到府", lastOrder:null };
+let PRODUCTS = [];
+let CATEGORIES = [];
+
+function fmt(n){ return Number(n).toLocaleString('en-US'); }
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, ch => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]
+  ));
+}
+
+// ---------- 與 Google 試算表溝通 ----------
+async function apiGet(params){
+  const url = CONFIG.apiUrl + '?' + new URLSearchParams(params).toString();
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+async function apiPost(body){
+  // 用 text/plain 可避免瀏覽器的預檢請求(preflight)，Apps Script 才收得到
+  const res = await fetch(CONFIG.apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// ---------- 載入商品與分類 ----------
+const categoryGrid = document.getElementById('categoryGrid');
+
+async function loadCatalog(){
+  categoryGrid.innerHTML = `<div class="load-msg">商品載入中，請稍候…</div>`;
+  try{
+    const [cats, prods] = await Promise.all([
+      apiGet({ action:'categories' }),
+      apiGet({ action:'products' })
+    ]);
+    if(!Array.isArray(cats) || !Array.isArray(prods)) throw new Error('資料格式錯誤');
+
+    CATEGORIES = cats.map(c => ({
+      id: String(c.id).trim(),
+      name: String(c.name || c.id),
+      desc: String(c.desc || ''),
+      note: String(c.note || '')
+    }));
+    PRODUCTS = prods.map(p => ({
+      id: String(p.id).trim(),
+      category: String(p.category).trim(),
+      name: String(p.name || ''),
+      pot: String(p.pot || ''),
+      desc: String(p.desc || ''),
+      price: Number(p.price) || 0,
+      img: String(p.img || '').trim()
+    }));
+    PRODUCTS.forEach(p => { if(!(p.id in state.cart)) state.cart[p.id] = 0; });
+    renderCategories();
+  }catch(e){
+    console.error('載入商品失敗', e);
+    categoryGrid.innerHTML = `
+      <div class="load-msg">
+        商品暫時載入失敗，請檢查網路後再試一次。
+        <br><button class="retry-btn" id="retryLoad">重新載入</button>
+      </div>`;
+    document.getElementById('retryLoad').onclick = loadCatalog;
+  }
+}
+
+// 把各種 Google 雲端硬碟連結統一轉成最穩定的縮圖網址；其他網址原樣使用
+function imgUrl(u){
+  u = String(u || '').trim();
+  if(!u) return '';
+  if(/drive\.google\.com|docs\.google\.com/.test(u)){
+    const m = u.match(/\/d\/([\w-]{10,})/) || u.match(/[?&]id=([\w-]{10,})/);
+    if(m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1000';
+  }
+  return u;
+}
+function photoHtml(p, alt){
+  return p.img
+    ? `<img src="${esc(imgUrl(p.img))}" alt="${esc(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=leafSvg">`
+    : leafSvg;
+}
+
+// ---------- 商品分類 ----------
+function renderCategories(){
+  categoryGrid.innerHTML = '';
+  CATEGORIES.forEach(cat=>{
+    const items = PRODUCTS.filter(p=>p.category===cat.id);
+    if(items.length===0) return;
+    const cover = items[0];
+    const card = document.createElement('button');
+    card.className = 'cat-card';
+    card.innerHTML = `
+      <div class="cat-cover">${photoHtml(cover, cat.name)}</div>
+      <div class="cat-body">
+        <h3 class="display">${esc(cat.name)}</h3>
+        <p>${esc(cat.desc)}</p>
+        <span class="cat-count">共 ${items.length} 項商品 →</span>
+      </div>
+    `;
+    card.onclick = ()=> openCategory(cat);
+    categoryGrid.appendChild(card);
+  });
+  if(!categoryGrid.children.length){
+    categoryGrid.innerHTML = `<div class="load-msg">目前沒有上架的商品。</div>`;
+  }
+}
+
+function openCategory(cat){
+  document.getElementById('categoryView').style.display = 'none';
+  document.getElementById('productView').style.display = 'block';
+  document.getElementById('categoryTitle').textContent = cat.name;
+  document.getElementById('careNote').textContent = cat.note || '';
+  document.getElementById('careNote').style.display = cat.note ? 'block' : 'none';
+  renderProductGrid(PRODUCTS.filter(p=>p.category===cat.id));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.getElementById('backToCategories').onclick = ()=>{
+  document.getElementById('productView').style.display = 'none';
+  document.getElementById('categoryView').style.display = 'block';
+};
+
+// ---------- 商品渲染 ----------
+const grid = document.getElementById('productGrid');
+
+function renderProductGrid(items){
+  grid.innerHTML = '';
+  document.getElementById('stockCount').textContent = `共 ${items.length} 項商品`;
+  items.forEach(p=> grid.appendChild(buildProductCard(p)));
+}
+
+function buildProductCard(p){
+  const card = document.createElement('div');
+  card.className='card';
+  card.innerHTML = `
+    <div class="card-photo">${photoHtml(p, p.name)}</div>
+    <div class="card-body">
+      ${p.pot ? `<span class="pot-tag">${esc(p.pot)}</span>` : ''}
+      <div class="card-name display">${esc(p.name)}</div>
+      <div class="card-desc">${esc(p.desc)}</div>
+      <div class="price-row"><span class="price-tag">NT$ ${fmt(p.price)}</span></div>
+      <div class="stepper">
+        <button class="minus">−</button>
+        <input type="text" readonly value="0" class="qty-input">
+        <button class="plus">+</button>
+      </div>
+      <button class="add-btn">加入購物清單</button>
+    </div>
+  `;
+  const qtyInput = card.querySelector('.qty-input');
+  card.querySelector('.minus').onclick = ()=>{
+    let v = parseInt(qtyInput.value); if(v>0) v--; qtyInput.value=v;
+  };
+  card.querySelector('.plus').onclick = ()=>{
+    let v = parseInt(qtyInput.value); if(v<99) v++; qtyInput.value=v;
+  };
+  card.querySelector('.add-btn').onclick = (e)=>{
+    const q = parseInt(qtyInput.value);
+    if(q<=0){ qtyInput.focus(); return; }
+    state.cart[p.id] = (state.cart[p.id] || 0) + q;
+    qtyInput.value = 0;
+    const btn = e.target;
+    btn.textContent = '已加入 ✓';
+    btn.classList.add('added');
+    setTimeout(()=>{ btn.textContent='加入購物清單'; btn.classList.remove('added'); }, 900);
+    updateCartBar();
+  };
+  return card;
+}
+
+// ---------- 購物車列 ----------
+const cartBar = document.getElementById('cartBar');
+function cartItems(){
+  return PRODUCTS.filter(p=>state.cart[p.id]>0)
+    .map(p=>({...p, qty:state.cart[p.id], subtotal:p.price*state.cart[p.id]}));
+}
+function cartTotal(){ return cartItems().reduce((s,i)=>s+i.subtotal,0); }
+// 運費：只有「宅配到府」且購物車有東西才收；達免運門檻則 0
+function shippingFee(){
+  const sub = cartTotal();
+  if(state.delivery !== '宅配到府' || sub <= 0) return 0;
+  const free = Number(CONFIG.shipping && CONFIG.shipping.freeOver) || 0;
+  if(free > 0 && sub >= free) return 0;
+  return Number(CONFIG.shipping && CONFIG.shipping.fee) || 0;
+}
+function grandTotal(){ return cartTotal() + shippingFee(); }
+function renderTotals(){
+  const ship = shippingFee();
+  const free = Number(CONFIG.shipping && CONFIG.shipping.freeOver) || 0;
+  document.getElementById('panelSubtotal').textContent = fmt(cartTotal());
+  document.getElementById('panelShip').textContent = fmt(ship);
+  document.getElementById('shipLabel').textContent =
+    state.delivery !== '宅配到府' ? '運費（面交自取免運）'
+    : (free > 0 ? (ship === 0 ? '運費（已達免運）' : `運費（滿 NT$ ${fmt(free)} 免運）`) : '運費（宅配）');
+  document.getElementById('panelTotal').textContent = fmt(grandTotal());
+}
+function updateCartBar(){
+  const items = cartItems();
+  const count = items.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = fmt(cartTotal());
+  cartBar.classList.toggle('show', count>0);
+}
+
+// ---------- 結帳面板 ----------
+const checkoutOverlay = document.getElementById('checkoutOverlay');
+const transferBox = document.getElementById('transferBox');
+transferBox.innerHTML = `轉帳資訊　${esc(CONFIG.transfer.bank)}<br>帳號　${esc(CONFIG.transfer.account)}<br>戶名　${esc(CONFIG.transfer.holder)}<br><b>請先轉帳，再填寫後五碼並送出訂單</b>`;
+
+function renderCartLines(){
+  const wrap = document.getElementById('cartLines');
+  const items = cartItems();
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty-state">購物清單是空的</div>`;
+  } else {
+    wrap.innerHTML = items.map(i=>`
+      <div class="cart-line">
+        <span>${esc(i.name)}${i.pot ? `（${esc(i.pot)}）` : ''} × ${i.qty}</span>
+        <span>NT$ ${fmt(i.subtotal)} <button class="rm" data-id="${esc(i.id)}">移除</button></span>
+      </div>
+    `).join('');
+    wrap.querySelectorAll('.rm').forEach(btn=>{
+      btn.onclick = ()=>{ state.cart[btn.dataset.id]=0; renderCartLines(); updateCartBar(); };
+    });
+  }
+  renderTotals();
+}
+
+document.getElementById('openCheckout').onclick = ()=>{
+  renderCartLines();
+  document.getElementById('checkoutStep').style.display='block';
+  document.getElementById('successStep').style.display='none';
+  checkoutOverlay.classList.add('show');
+};
+document.getElementById('closeCheckout').onclick = ()=> checkoutOverlay.classList.remove('show');
+checkoutOverlay.onclick = (e)=>{ if(e.target===checkoutOverlay) checkoutOverlay.classList.remove('show'); };
+
+// 取貨方式切換
+document.querySelectorAll('#deliveryRow .radio-opt').forEach(opt=>{
+  opt.onclick = ()=>{
+    document.querySelectorAll('#deliveryRow .radio-opt').forEach(o=>o.classList.remove('active'));
+    opt.classList.add('active');
+    state.delivery = opt.dataset.val;
+    document.getElementById('addressField').style.display = state.delivery==='宅配到府' ? 'block':'none';
+    document.getElementById('pickupNote').style.display = state.delivery==='面交自取' ? 'block':'none';
+    renderTotals();
+  };
+});
+
+// ---------- 送出訂單 ----------
+function pad2(n){ return String(n).padStart(2,'0'); }
+function genOrderNo(){
+  const d = new Date();
+  return `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}-${pad2(d.getHours())}${pad2(d.getMinutes())}${Math.floor(Math.random()*90+10)}`;
+}
+function nowText(){
+  const d = new Date();
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+
+// 訂單內容文字（試算表與「複製」共用）
+function orderToText(o){
+  const lines = String(o.itemsText || '').split('\n').filter(Boolean).map(l=>'・'+l).join('\n');
+  return `【${CONFIG.shopName} 訂單 ${o.id}】
+時間：${o.time}
+姓名：${o.name}
+電話：${o.phone}
+取貨方式：${o.delivery}${o.delivery==='宅配到府' && o.address ? '\n地址：'+o.address : ''}
+匯款後五碼：${o.bankLast5 || '未填'}
+備註：${o.note || '無'}
+------
+${lines}
+------
+總計：NT$ ${fmt(o.total)}`;
+}
+
+document.getElementById('submitOrder').onclick = async ()=>{
+  const items = cartItems();
+  const errEl = document.getElementById('formErr');
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const address = document.getElementById('fAddress').value.trim();
+
+  if(items.length===0){ errEl.textContent='購物清單是空的，請先選購商品'; errEl.style.display='block'; return; }
+  if(!name || !phone){ errEl.textContent='請填寫姓名與聯絡電話'; errEl.style.display='block'; return; }
+  if(state.delivery==='宅配到府' && !address){ errEl.textContent='請填寫收件地址'; errEl.style.display='block'; return; }
+  const bankLast5 = document.getElementById('fBankLast5').value.trim();
+  if(!/^\d{5}$/.test(bankLast5)){ errEl.textContent='請先完成轉帳，並填寫匯款帳號後五碼（5 位數字）'; errEl.style.display='block'; return; }
+  errEl.style.display='none';
+
+  const order = {
+    id: genOrderNo(),
+    time: nowText(),
+    name, phone,
+    delivery: state.delivery,
+    address: state.delivery==='宅配到府' ? address : '',
+    bankLast5,
+    note: document.getElementById('fNote').value.trim(),
+    itemsText: items.map(i=>`${i.name}${i.pot ? '（'+i.pot+'）' : ''} × ${i.qty}　NT$ ${fmt(i.subtotal)}`)
+      .concat(state.delivery==='宅配到府' ? [`運費（宅配）　NT$ ${fmt(shippingFee())}`] : [])
+      .join('\n'),
+    total: grandTotal()
+  };
+
+  const submitBtn = document.getElementById('submitOrder');
+  submitBtn.disabled = true; submitBtn.textContent = '送出中…';
+
+  try{
+    const result = await apiPost({ action:'submitOrder', order });
+    if(!result || !result.success) throw new Error((result && result.error) || '未知錯誤');
+  }catch(e){
+    console.error('送出訂單失敗', e);
+    errEl.textContent = '訂單送出時發生問題，請稍後再試一次，或直接截圖此頁面告知店家。';
+    errEl.style.display='block';
+    submitBtn.disabled=false; submitBtn.textContent='送出訂單';
+    return;
+  }
+
+  state.lastOrder = order;
+  Object.keys(state.cart).forEach(id=> state.cart[id]=0 );
+  updateCartBar();
+  submitBtn.disabled=false; submitBtn.textContent='送出訂單';
+
+  document.getElementById('checkoutStep').style.display='none';
+  document.getElementById('successStep').style.display='block';
+  document.getElementById('orderNoDisplay').textContent = order.id;
+};
+
+document.getElementById('copyOrderText').onclick = async ()=>{
+  const btn = document.getElementById('copyOrderText');
+  try{
+    await navigator.clipboard.writeText(orderToText(state.lastOrder));
+    btn.textContent='已複製 ✓';
+  }catch(e){ btn.textContent='複製失敗，請手動截圖'; }
+  setTimeout(()=> btn.textContent='複製訂單內容', 1500);
+};
+document.getElementById('closeSuccess').onclick = ()=> checkoutOverlay.classList.remove('show');
+
+/* =========================================================
+   店家後台（密碼由 Apps Script 驗證）
+   ========================================================= */
+const adminOverlay = document.getElementById('adminOverlay');
+let adminPass = '';
+let allOrders = [];
+
+function normalizeOrder(o){
+  let time = o.time;
+  if(typeof time === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(time)){
+    const d = new Date(time);
+    time = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  }
+  let phone = String(o.phone == null ? '' : o.phone);
+  if(/^\d{9}$/.test(phone)) phone = '0' + phone; // 試算表若把電話當數字，會吃掉開頭的 0
+  return { ...o, id:String(o.id), time:String(time), phone, total:Number(o.total)||0 };
+}
+
+document.getElementById('adminLink').onclick = async ()=>{
+  const pass = prompt('請輸入店家管理密碼');
+  if(pass === null) return;
+  adminPass = pass;
+  adminOverlay.classList.add('show');
+  await loadOrders(true);
+};
+document.getElementById('closeAdmin').onclick = ()=> adminOverlay.classList.remove('show');
+adminOverlay.onclick = (e)=>{ if(e.target===adminOverlay) adminOverlay.classList.remove('show'); };
+
+async function loadOrders(isLogin){
+  const listEl = document.getElementById('orderList');
+  listEl.innerHTML = `<div class="empty-state">讀取中…</div>`;
+  try{
+    const res = await apiGet({ action:'orders', pass:adminPass });
+    if(res && res.error === 'unauthorized'){
+      adminPass = '';
+      adminOverlay.classList.remove('show');
+      alert('密碼錯誤');
+      return;
+    }
+    if(!Array.isArray(res)) throw new Error('資料格式錯誤');
+    allOrders = res.map(normalizeOrder);
+    renderOrders();
+  }catch(e){
+    console.error('讀取訂單失敗', e);
+    listEl.innerHTML = `<div class="empty-state">讀取訂單時發生問題，請按「重新整理」再試一次。</div>`;
+  }
+}
+
+function renderOrders(){
+  const listEl = document.getElementById('orderList');
+  if(allOrders.length===0){
+    listEl.innerHTML = `<div class="empty-state">目前還沒有訂單</div>`;
+    return;
+  }
+  listEl.innerHTML = allOrders.map(o=>`
+    <div class="order-card">
+      <div class="row"><b>${esc(o.id)}</b><span>${esc(o.time)}</span></div>
+      <div class="row"><span>${esc(o.name)}｜${esc(o.phone)}</span><span>${esc(o.delivery)}</span></div>
+      ${o.address ? `<div class="items">地址：${esc(o.address)}</div>`:''}
+      <div class="items">${esc(o.itemsText).replace(/\n/g,'<br>')}</div>
+      ${o.bankLast5 ? `<div class="items">匯款後五碼：${esc(o.bankLast5)}</div>`:''}
+      ${o.note ? `<div class="items">備註：${esc(o.note)}</div>`:''}
+      <div class="row"><span></span><b>NT$ ${fmt(o.total)}</b></div>
+      <div class="actions">
+        <button class="copy" data-id="${esc(o.id)}">複製</button>
+        <button class="del" data-id="${esc(o.id)}">刪除</button>
+      </div>
+    </div>
+  `).join('');
+
+  listEl.querySelectorAll('.copy').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const o = allOrders.find(x=>x.id===btn.dataset.id);
+      try{ await navigator.clipboard.writeText(orderToText(o)); btn.textContent='已複製'; setTimeout(()=>btn.textContent='複製',1200); }
+      catch(e){ alert('複製失敗'); }
+    };
+  });
+  listEl.querySelectorAll('.del').forEach(btn=>{
+    btn.onclick = async ()=>{
+      if(!confirm('確定要刪除這筆訂單嗎？此動作無法復原。')) return;
+      try{
+        const r = await apiPost({ action:'deleteOrder', id:btn.dataset.id, pass:adminPass });
+        if(!r || !r.success) throw new Error((r && r.error) || '未知錯誤');
+        allOrders = allOrders.filter(x=>x.id!==btn.dataset.id);
+        renderOrders();
+      }catch(e){ alert('刪除失敗，請稍後再試'); }
+    };
+  });
+}
+
+document.getElementById('refreshOrders').onclick = ()=> loadOrders(false);
+document.getElementById('copyAllOrders').onclick = async ()=>{
+  if(allOrders.length===0){ alert('目前沒有訂單可複製'); return; }
+  const text = allOrders.map(orderToText).join('\n\n=====\n\n');
+  try{ await navigator.clipboard.writeText(text); alert('已複製全部訂單內容'); }
+  catch(e){ alert('複製失敗'); }
+};
+
+// ---------- 啟動 ----------
+loadCatalog();
+</script>
+</body>
+</html>
